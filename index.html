@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>matter-alignment-test</title>
+    <link rel="stylesheet" href="app.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="status-message" class="hidden"></div>
+
+    <h1 class="title">Matter alignment test</h1>
+
+    <div class="intro-description">Given vertices that are aligned with an svg like this, how do we render it so that it's centered on the Matter body?</div>
+
+    <img src="svg-vertex-alignment.png" alt="svg with the vertices on it">
+
+    <svg id="bone-canvas" width="900" height="1800">
+      <g id="bone-root"></g>
+      <g id="diagnostics-root"></g>
+    </svg>
+
+    <div id="version-info"></div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
