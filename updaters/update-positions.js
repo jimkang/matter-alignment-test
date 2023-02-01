@@ -6,6 +6,7 @@ export function UpdatePositions({
   boardHeight,
   groundThickness = 60,
   renderableSpecs,
+  freeze,
 }) {
   var engine = new Engine.create();
   // create two walls and a ground
@@ -49,6 +50,7 @@ export function UpdatePositions({
       angle: spec.rotationAngle,
       label: spec.id,
       restitution: 0.8,
+      isStatic: freeze,
     };
 
     if (spec.vertices) {

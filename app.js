@@ -5,6 +5,7 @@ import { renderBones } from './renderers/render-bones';
 import { UpdatePositions } from './updaters/update-positions';
 import { getPathsFromSVG } from './util/get-paths-from-svg';
 import testSpec from './test-spec.json';
+import squareSpec from './square-spec.json';
 
 var routeState;
 
@@ -15,23 +16,27 @@ var routeState;
   routeState = RouteState({
     followRoute,
     windowObject: window,
+    propsToCoerceToBool: ['freeze'],
   });
   routeState.routeFromHash();
 })();
 
-async function followRoute() {
+async function followRoute({ freeze = false }) {
   var board = document.getElementById('bone-canvas');
   const boardWidth = +board.getAttribute('width');
   const boardHeight = +board.getAttribute('height');
 
   var svgPathsForSpecs = {
     [testSpec.id]: await getSVGPathsFromURL('static/test.svg'),
+    [squareSpec.id]: await getSVGPathsFromURL('static/square.svg'),
   };
+  var specs = [testSpec, squareSpec];
 
   var updatePositions = UpdatePositions({
     boardWidth,
     boardHeight,
-    renderableSpecs: [testSpec],
+    renderableSpecs: specs,
+    freeze,
   });
 
   loop();
@@ -41,7 +46,7 @@ async function followRoute() {
     renderBones({
       bodies,
       svgPathsForSpecs,
-      specs: [testSpec],
+      specs,
     });
     requestAnimationFrame(loop);
   }

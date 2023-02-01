@@ -1,5 +1,5 @@
 {
-  "rotationAngle": 60,
+  "rotationAngle": 0,
   "id": "basic-shape",
   "vertices": [
     [
@@ -79,6 +79,10 @@
       84.16667175292969
     ]
   ],
+  "verticesOffset": {
+    "x": 11,
+    "y": 13.17
+    },
   "verticesWidth": 159,
   "verticesHeight": 147,
   "width": 183.22,

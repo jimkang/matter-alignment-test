@@ -30,28 +30,22 @@ export function renderBones({ bodies, svgPathsForSpecs, specs }) {
       throw new Error(`No spec for ${body.label}.`);
     }
 
-    // bbox does not take transforms into account.
-    var bbox = this.getBBox({ stroke: true });
-
-    const widthDiff =
-      spec.width -
-      (spec.verticesWidth
-        ? spec.verticesWidth
-        : body.bounds.max.x - body.bounds.min.x);
-    const heightDiff =
-      spec.height -
-      (spec.verticesHeight
-        ? spec.verticesHeight
-        : body.bounds.max.y - body.bounds.min.y);
-
-    const translateToOriginString = `translate(${-bbox.width / 2}, ${
-      -bbox.height / 2
-    })`;
-    const rotationString = `rotate(${angleDegrees})`;
-    const translateString = `translate(${body.position.x}, ${body.position.y})`;
-    // The last command in the transform string goes first. Translate to origin,
-    // then rotate, then translate to the destination.
-    return `${translateString} ${rotationString} ${translateToOriginString}`;
+    // body.position is the center of the body.
+    // Additionally, you can't assume that the vertices and
+    // the svg share the same center.
+    // Everything that goes into the translate command has to be pre-rotation.
+    // Find the where the corner of the body would be if it weren't rotated.
+    const bodyCornerX = body.position.x - spec.verticesWidth / 2;
+    const bodyCornerY = body.position.y - spec.verticesHeight / 2;
+    // Find where the representation's corner should be by using verticesOffset
+    // and the body's corner.
+    const translateString = `translate(${
+      bodyCornerX - spec.verticesOffset.x
+    }, ${bodyCornerY - spec.verticesOffset.y})`;
+    const rotationString = `rotate(${angleDegrees}, ${body.position.x}, ${body.position.y})`;
+    // The last command in the transform string goes first. Translate to the
+    // destination, then rotate.
+    return `${rotationString} ${translateString}`;
   }
 
   function appendPaths({ label }) {
@@ -97,6 +91,16 @@ function verticesToEdges(vertices) {
       y1: vertices[i].y,
       x2: vertices[i + 1].x,
       y2: vertices[i + 1].y,
+    });
+  }
+  if (edges.length > 2) {
+    let lastEdge = edges[edges.length - 1];
+    let firstEdge = edges[0];
+    edges.push({
+      x1: lastEdge.x2,
+      y1: lastEdge.y2,
+      x2: firstEdge.x1,
+      y2: firstEdge.y1,
     });
   }
   return edges;
