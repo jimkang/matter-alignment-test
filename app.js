@@ -6,6 +6,7 @@ import { UpdatePositions } from './updaters/update-positions';
 import { getPathsFromSVG } from './util/get-paths-from-svg';
 import testSpec from './test-spec.json';
 import squareSpec from './square-spec.json';
+import headSpec from './head-bone.json';
 
 var routeState;
 
@@ -29,8 +30,9 @@ async function followRoute({ freeze = false }) {
   var svgPathsForSpecs = {
     [testSpec.id]: await getSVGPathsFromURL('static/test.svg'),
     [squareSpec.id]: await getSVGPathsFromURL('static/square.svg'),
+    [headSpec.id]: await getSVGPathsFromURL('static/head-bone.svg'),
   };
-  var specs = [testSpec, squareSpec];
+  var specs = [testSpec, squareSpec, headSpec];
 
   var updatePositions = UpdatePositions({
     boardWidth,
